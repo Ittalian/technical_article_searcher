@@ -29,8 +29,12 @@ class ResultState extends State<Result> {
 
   buildPage() {
     setState(() {
-      pages.add(QiitaResult(articles: widget.qiitaArticles));
-      pages.add(ZennResult(articles: widget.zennArticles));
+      if (widget.qiitaArticles.isNotEmpty) {
+        pages.add(QiitaResult(articles: widget.qiitaArticles));
+      }
+      if (widget.zennArticles.isNotEmpty) {
+        pages.add(ZennResult(articles: widget.zennArticles));
+      }
     });
   }
 

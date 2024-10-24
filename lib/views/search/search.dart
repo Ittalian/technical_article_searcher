@@ -6,10 +6,12 @@ import 'package:technical_article_searcher/models/zenn_article.dart';
 import 'package:technical_article_searcher/services/qiita_article_service.dart';
 import 'package:technical_article_searcher/services/tag_service.dart';
 import 'package:technical_article_searcher/services/zenn_article_service.dart';
+import 'package:technical_article_searcher/utils/loading/loading_dialog.dart';
 import 'package:technical_article_searcher/widgets/base/base_button.dart';
 import 'package:technical_article_searcher/widgets/base/base_image_container.dart';
 import 'package:technical_article_searcher/widgets/base/base_select.dart';
 import 'package:technical_article_searcher/widgets/base/base_textfield.dart';
+import '../../utils/constants/message_constants.dart' as message;
 
 class Search extends StatefulWidget {
   const Search({super.key});
@@ -22,6 +24,8 @@ class SearchState extends State<Search> {
   String keyWord = '';
   List<String> tags = [];
   String tag = '';
+  String site = '';
+  List<String> siteOption = ['qiita', 'zenn', '両方'];
 
   @override
   initState() {
@@ -55,6 +59,12 @@ class SearchState extends State<Search> {
   void setTag(String value) {
     setState(() {
       tag = value;
+    });
+  }
+
+  void setSite(String value) {
+    setState(() {
+      site = value;
     });
   }
 
@@ -93,11 +103,24 @@ class SearchState extends State<Search> {
                   option: tags,
                   hintText: 'タグ',
                   onSelected: (value) => setTag(value)),
+              BaseSelect(
+                option: siteOption,
+                hintText: '媒体',
+                onSelected: (value) => setSite(value),
+              ),
               BaseButton(
                   label: '検索',
                   onPressed: () async {
-                    List<QiitaArticle> qiitaArticles = await searchQiita();
-                    List<ZennArticle> zennArticles = await searchZenn();
+                    List<QiitaArticle> qiitaArticles = [];
+                    List<ZennArticle> zennArticles = [];
+                    await LoadingDialog.show(context, message.loading);
+                    if (site != 'zenn') {
+                      qiitaArticles = await searchQiita();
+                    }
+                    if (site != 'qiita') {
+                      zennArticles = await searchZenn();
+                    }
+                    await LoadingDialog.hide(context);
                     moveResultPage(context, qiitaArticles, zennArticles);
                   }),
             ],

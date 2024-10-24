@@ -15,7 +15,7 @@ class BaseSelect extends StatefulWidget {
 }
 
 class BaseSelectState extends State<BaseSelect> {
-  String? selectedDay;
+  String? value;
   String? errorText;
 
   @override
@@ -26,11 +26,11 @@ class BaseSelectState extends State<BaseSelect> {
         margin: const EdgeInsets.all(10),
         child: DropdownButton<String>(
           underline: const SizedBox(),
-          value: selectedDay,
+          value: value,
           hint: Text(widget.hintText),
           onChanged: (String? newValue) {
             setState(() {
-              selectedDay = newValue;
+              value = newValue;
             });
             widget.onSelected(newValue!);
           },
