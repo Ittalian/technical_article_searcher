@@ -8,7 +8,7 @@ class TagService {
 
   Future<List<Tag>> getAllTags() async {
     List<Tag> tags = [];
-    String requestUrl = 'https://qiita.com/api/v2/tags?sort=count';
+    String requestUrl = 'https://qiita.com/api/v2/tags?page=1&sort=count';
 
     try {
       final response = await http.get(Uri.parse(requestUrl));

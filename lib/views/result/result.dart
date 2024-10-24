@@ -1,28 +1,44 @@
 import 'package:flutter/material.dart';
-import 'package:technical_article_searcher/models/article.dart';
-import 'package:technical_article_searcher/widgets/base/base_image_container.dart';
-import 'package:technical_article_searcher/widgets/result/resullt_tile.dart';
+import 'package:technical_article_searcher/models/qiita_article.dart';
+import 'package:technical_article_searcher/models/zenn_article.dart';
+import 'package:technical_article_searcher/views/result/qiita/qiita_result.dart';
+import 'package:technical_article_searcher/views/result/zenn/zenn_result.dart';
 
-class Result extends StatelessWidget {
-  final List<Article> articles;
+class Result extends StatefulWidget {
+  final List<QiitaArticle> qiitaArticles;
+  final List<ZennArticle> zennArticles;
 
-  const Result({super.key, required this.articles});
+  const Result({
+    super.key,
+    required this.qiitaArticles,
+    required this.zennArticles,
+  });
+
+  @override
+  State<Result> createState() => ResultState();
+}
+
+class ResultState extends State<Result> {
+  List<Widget> pages = [];
+
+  @override
+  initState() {
+    super.initState();
+    buildPage();
+  }
+
+  buildPage() {
+    setState(() {
+      pages.add(QiitaResult(articles: widget.qiitaArticles));
+      pages.add(ZennResult(articles: widget.zennArticles));
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return BaseImageContainer(
-      imagePath: 'images/result_qiita_background.jpg',
-      child: Scaffold(
-        backgroundColor: Colors.white.withOpacity(0),
-        body: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              for (var article in articles)
-                ResulltTile(article: article)
-            ],
-          ),
-        ),
+    return Scaffold(
+      body: PageView(
+        children: pages,
       )
     );
   }

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:technical_article_searcher/config/routes.dart';
-import 'package:technical_article_searcher/models/article.dart';
+import 'package:technical_article_searcher/models/qiita_article.dart';
 import 'package:technical_article_searcher/models/tag.dart';
-import 'package:technical_article_searcher/services/article_service.dart';
+import 'package:technical_article_searcher/models/zenn_article.dart';
+import 'package:technical_article_searcher/services/qiita_article_service.dart';
 import 'package:technical_article_searcher/services/tag_service.dart';
+import 'package:technical_article_searcher/services/zenn_article_service.dart';
 import 'package:technical_article_searcher/widgets/base/base_button.dart';
 import 'package:technical_article_searcher/widgets/base/base_image_container.dart';
 import 'package:technical_article_searcher/widgets/base/base_select.dart';
@@ -28,7 +30,10 @@ class SearchState extends State<Search> {
   }
 
   Future<void> setAllTags() async {
-    tags = await getAllTags();
+    List<String> tagList = await getAllTags();
+    setState(() {
+      tags = tagList;
+    });
   }
 
   Future<List<String>> getAllTags() async {
@@ -53,16 +58,23 @@ class SearchState extends State<Search> {
     });
   }
 
-  Future<List<Article>> search() async {
-    return await ArticleService(keyWord: keyWord, tag: tag)
-        .getArticles(keyWord, tag);
+  Future<List<QiitaArticle>> searchQiita() async {
+    return await QiitaArticleService(keyWord: keyWord, tag: tag).getArticles();
   }
 
-  void moveResultPage(BuildContext context, List<Article> articles) {
+  Future<List<ZennArticle>> searchZenn() async {
+    return await ZennArticleService(keyWord: keyWord).getArticles();
+  }
+
+  void moveResultPage(BuildContext context, List<QiitaArticle> qiitaArticles,
+      List<ZennArticle> zennArticles) {
     Navigator.pushNamed(
       context,
       Routes.result,
-      arguments: {'articles': articles},
+      arguments: {
+        'qiita_articles': qiitaArticles,
+        'zenn_articles': zennArticles,
+      },
     );
   }
 
@@ -84,8 +96,9 @@ class SearchState extends State<Search> {
               BaseButton(
                   label: '検索',
                   onPressed: () async {
-                    List<Article> articles = await search();
-                    moveResultPage(context, articles);
+                    List<QiitaArticle> qiitaArticles = await searchQiita();
+                    List<ZennArticle> zennArticles = await searchZenn();
+                    moveResultPage(context, qiitaArticles, zennArticles);
                   }),
             ],
           ),

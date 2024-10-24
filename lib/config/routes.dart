@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:technical_article_searcher/models/article.dart';
+import 'package:technical_article_searcher/models/qiita_article.dart';
+import 'package:technical_article_searcher/models/zenn_article.dart';
 import 'package:technical_article_searcher/views/result/result.dart';
 
 class Routes {
@@ -11,7 +12,8 @@ class Routes {
         final resultOptions = settings.arguments as Map;
         return MaterialPageRoute(
           builder: (_) => Result(
-            articles: resultOptions['articles'] as List<Article>,
+            qiitaArticles: resultOptions['qiita_articles'] as List<QiitaArticle>,
+            zennArticles: resultOptions['zenn_articles'] as List<ZennArticle>,
           ),
         );
       default:
