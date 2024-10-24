@@ -7,11 +7,15 @@ import 'package:technical_article_searcher/views/result/zenn/zenn_result.dart';
 class Result extends StatefulWidget {
   final List<QiitaArticle> qiitaArticles;
   final List<ZennArticle> zennArticles;
+  final String keyWord;
+  final String tag;
 
   const Result({
     super.key,
     required this.qiitaArticles,
     required this.zennArticles,
+    required this.keyWord,
+    required this.tag,
   });
 
   @override
@@ -30,10 +34,17 @@ class ResultState extends State<Result> {
   buildPage() {
     setState(() {
       if (widget.qiitaArticles.isNotEmpty) {
-        pages.add(QiitaResult(articles: widget.qiitaArticles));
+        pages.add(QiitaResult(
+          articles: widget.qiitaArticles,
+          keyWord: widget.keyWord,
+          tag: widget.tag,
+        ));
       }
       if (widget.zennArticles.isNotEmpty) {
-        pages.add(ZennResult(articles: widget.zennArticles));
+        pages.add(ZennResult(
+          articles: widget.zennArticles,
+          keyWord: widget.keyWord,
+        ));
       }
     });
   }
@@ -41,9 +52,8 @@ class ResultState extends State<Result> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: PageView(
-        children: pages,
-      )
-    );
+        body: PageView(
+      children: pages,
+    ));
   }
 }

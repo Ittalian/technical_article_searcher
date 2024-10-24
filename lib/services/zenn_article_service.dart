@@ -10,15 +10,16 @@ class ZennArticleService {
     required this.keyWord,
   });
 
-  Future<List<ZennArticle>> getArticles() async {
+  Future<List<ZennArticle>> getArticles(int page) async {
     List<ZennArticle> articles = [];
-    String requestUrl = 'https://zenn.dev/api/articles';
+    String requestUrl = 'https://zenn.dev/api/articles?page=$page';
 
     try {
       final response = await http.get(Uri.parse(requestUrl));
       if (response.statusCode == 200) {
         final resJson = json.decode(response.body);
         final data = resJson['articles'];
+        final nextPage = resJson['next_page'];
         for (var res in data) {
           if (_filterByKeyWord(res['title'])) {
             articles.add(ZennArticle(
@@ -26,6 +27,7 @@ class ZennArticleService {
               url: 'https://zenn.dev${res['path']}',
               publishedAt: _formatDate(res['published_at']),
               bodyUpdatedAt: _formatDate(res['body_updated_at']),
+              nextPage: nextPage,
             ));
           }
         }

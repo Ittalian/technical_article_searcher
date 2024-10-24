@@ -14,6 +14,8 @@ class Routes {
           builder: (_) => Result(
             qiitaArticles: resultOptions['qiita_articles'] as List<QiitaArticle>,
             zennArticles: resultOptions['zenn_articles'] as List<ZennArticle>,
+            keyWord: resultOptions['key_word'] as String,
+            tag: resultOptions['tag'] as String,
           ),
         );
       default:

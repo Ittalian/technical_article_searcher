@@ -69,11 +69,11 @@ class SearchState extends State<Search> {
   }
 
   Future<List<QiitaArticle>> searchQiita() async {
-    return await QiitaArticleService(keyWord: keyWord, tag: tag).getArticles();
+    return await QiitaArticleService(keyWord: keyWord, tag: tag).getArticles(1);
   }
 
   Future<List<ZennArticle>> searchZenn() async {
-    return await ZennArticleService(keyWord: keyWord).getArticles();
+    return await ZennArticleService(keyWord: keyWord).getArticles(1);
   }
 
   void moveResultPage(BuildContext context, List<QiitaArticle> qiitaArticles,
@@ -84,6 +84,8 @@ class SearchState extends State<Search> {
       arguments: {
         'qiita_articles': qiitaArticles,
         'zenn_articles': zennArticles,
+        'key_word': keyWord,
+        'tag': tag,
       },
     );
   }

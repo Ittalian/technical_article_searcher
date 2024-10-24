@@ -12,10 +12,10 @@ class QiitaArticleService {
     required this.tag,
   });
 
-  Future<List<QiitaArticle>> getArticles() async {
+  Future<List<QiitaArticle>> getArticles(int page) async {
     List<QiitaArticle> articles = [];
     String requestUrl =
-        'https://qiita.com//api/v2/items?page=1&query=body:$keyWord';
+        'https://qiita.com//api/v2/items?page=$page&query=body:$keyWord';
     if (tag != '') {
       requestUrl += ' tag:$tag';
     }
@@ -31,6 +31,7 @@ class QiitaArticleService {
               url: res['url'],
               createdAt: _formatDate(res['created_at']),
               updatedAt: _formatDate(res['updated_at']),
+              nextPage: page + 1,
             ),
           );
         }
