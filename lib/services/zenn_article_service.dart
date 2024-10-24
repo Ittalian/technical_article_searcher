@@ -12,7 +12,7 @@ class ZennArticleService {
 
   Future<List<ZennArticle>> getArticles() async {
     List<ZennArticle> articles = [];
-    String requestUrl = 'https://zenn.dev/api/articles?query=body:$keyWord';
+    String requestUrl = 'https://zenn.dev/api/articles';
 
     try {
       final response = await http.get(Uri.parse(requestUrl));
@@ -20,12 +20,14 @@ class ZennArticleService {
         final resJson = json.decode(response.body);
         final data = resJson['articles'];
         for (var res in data) {
-          articles.add(ZennArticle(
-            title: res['title'],
-            url: 'https://zenn.dev${res['path']}',
-            publishedAt: res['published_at'],
-            bodyUpdatedAt: res['body_updated_at'],
-          ));
+          if (_filterByKeyWord(res['title'])) {
+            articles.add(ZennArticle(
+              title: res['title'],
+              url: 'https://zenn.dev${res['path']}',
+              publishedAt: res['published_at'],
+              bodyUpdatedAt: res['body_updated_at'],
+            ));
+          }
         }
       }
     } catch (e) {
@@ -34,5 +36,12 @@ class ZennArticleService {
     }
 
     return articles;
+  }
+
+  bool _filterByKeyWord(String name) {
+    if (name.toLowerCase().contains(keyWord.toLowerCase())) {
+      return true;
+    }
+    return false;
   }
 }

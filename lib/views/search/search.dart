@@ -11,7 +11,7 @@ import 'package:technical_article_searcher/widgets/base/base_button.dart';
 import 'package:technical_article_searcher/widgets/base/base_image_container.dart';
 import 'package:technical_article_searcher/widgets/base/base_select.dart';
 import 'package:technical_article_searcher/widgets/base/base_textfield.dart';
-import '../../utils/constants/message_constants.dart' as message;
+import '../../utils/constants/message_constants.dart' as messages;
 
 class Search extends StatefulWidget {
   const Search({super.key});
@@ -25,7 +25,7 @@ class SearchState extends State<Search> {
   List<String> tags = [];
   String tag = '';
   String site = '';
-  List<String> siteOption = ['qiita', 'zenn', '両方'];
+  List<String> siteOption = ['両方', 'qiita', 'zenn'];
 
   @override
   initState() {
@@ -107,13 +107,14 @@ class SearchState extends State<Search> {
                 option: siteOption,
                 hintText: '媒体',
                 onSelected: (value) => setSite(value),
+                initText: '両方',
               ),
               BaseButton(
                   label: '検索',
                   onPressed: () async {
                     List<QiitaArticle> qiitaArticles = [];
                     List<ZennArticle> zennArticles = [];
-                    await LoadingDialog.show(context, message.loading);
+                    await LoadingDialog.show(context, messages.loading);
                     if (site != 'zenn') {
                       qiitaArticles = await searchQiita();
                     }
