@@ -24,8 +24,8 @@ class ZennArticleService {
             articles.add(ZennArticle(
               title: res['title'],
               url: 'https://zenn.dev${res['path']}',
-              publishedAt: res['published_at'],
-              bodyUpdatedAt: res['body_updated_at'],
+              publishedAt: _formatDate(res['published_at']),
+              bodyUpdatedAt: _formatDate(res['body_updated_at']),
             ));
           }
         }
@@ -43,5 +43,10 @@ class ZennArticleService {
       return true;
     }
     return false;
+  }
+
+  String _formatDate(String date) {
+    DateTime dateTime = DateTime.parse(date);
+    return '${dateTime.year}年${dateTime.month.toString().padLeft(2, '0')}月${dateTime.day.toString().padLeft(2, '0')}日';
   }
 }

@@ -42,12 +42,12 @@ class ResulltTile extends StatelessWidget {
                 ? BaseTextButton(
                     onPressed: renderUrl,
                     label: qiitaArticle!.title,
-                    color: Colors.black,
+                    color: Colors.white,
                   )
                 : BaseTextButton(
                     onPressed: renderUrl,
                     label: zennArticle!.title,
-                    color: Colors.black,
+                    color: Colors.white,
                   ),
             zennArticle == null
                 ? ResultTextRow(label: '作成日 ', value: qiitaArticle!.createdAt)
